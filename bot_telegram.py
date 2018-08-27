@@ -31,10 +31,10 @@ def handle(msg):
         print(f"from: {msg['chat']['id']}, Msg: {msg['text']}")
         global users
         if msg['chat']['id'] not in users:
-            # users.append(msg['chat']['id'])
+            users.append(msg['chat']['id'])
             global skip
             skip += 1
-            if skip == 1:
+            if skip == 5:
                 spotbot.skip()
                 resp_skip = f'{skip}/5 música pulada\n'
                 print(f"Resposta: {resp_skip}")
