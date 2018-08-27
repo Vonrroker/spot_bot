@@ -63,7 +63,7 @@ def handle(msg):
         print(f"from: {msg['chat']['id']}, Msg: {msg['text']}")
         try:
             v = int(msg['text'][5:].replace(' ',''))
-            if 0 < v < 100:
+            if 0 <= v <= 100:
                 spotbot.volume(v)
                 print(f'Aumentando volume para {v}')
             else:
