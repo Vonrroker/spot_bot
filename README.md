@@ -1,1 +1,1 @@
-# spot_bot
+Bot telegram para gerenciar playlist no spotify feita em python
