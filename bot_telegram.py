@@ -1,10 +1,10 @@
 import telepot
 from telepot.loop import MessageLoop
 from Spotify_py import SpotBot
-from credencials import *
+from credencials import telegram, spotify_credencials, playlist_ids
+import letras_spotfy
 
 bot = telepot.Bot(telegram['token'])
-
 
 spotbot = SpotBot(spotify_credencials['user'],
                   spotify_credencials['scope'],
@@ -31,10 +31,10 @@ def handle(msg):
         print(f"from: {msg['chat']['id']}, Msg: {msg['text']}")
         global users
         if msg['chat']['id'] not in users:
-            users.append(msg['chat']['id'])
+            # users.append(msg['chat']['id'])
             global skip
             skip += 1
-            if skip == 5:
+            if skip == 1:
                 spotbot.skip()
                 resp_skip = f'{skip}/5 música pulada\n'
                 print(f"Resposta: {resp_skip}")
@@ -63,7 +63,7 @@ def handle(msg):
         print(f"from: {msg['chat']['id']}, Msg: {msg['text']}")
         try:
             v = int(msg['text'][5:].replace(' ',''))
-            if 0 <= v <= 100:
+            if 0 < v < 100:
                 spotbot.volume(v)
                 print(f'Aumentando volume para {v}')
             else:
@@ -72,6 +72,12 @@ def handle(msg):
         except ValueError:
             print(f"Volume {msg['text'][5:]} invalido, escolha uma valor entre 0 e 100")
             bot.sendMessage(msg['chat']['id'], f"Volume {msg['text'][5:]} invalido, escolha uma valor entre 0 e 100")
+    elif msg['text'][:6] == '/letra' and msg['text'][4:] != '':
+        musica = spotbot.current()
+        print(musica)
+        bot.sendMessage(msg['chat']['id'], letras_spotfy.letra(musica))
+    elif msg['text'][:8] == '/current' and msg['text'][4:] != '':
+        bot.sendMessage(msg['chat']['id'], spotbot.current())
     else:
         print(f"from: {msg['chat']['id']}, Msg: {msg['text']}")
         print('Resposta: Comandos\n')
@@ -84,7 +90,9 @@ def handle(msg):
                                            '\n    Para pular a musica'
                                            '\n/vol "volume entre 0 e 100"'
                                            '\n/play'
-                                           '\n/stop')
+                                           '\n/stop'
+                                           '\n/letra'
+                                           '\n/current')
 
 
 MessageLoop(bot, handle).run_as_thread()

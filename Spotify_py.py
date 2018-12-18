@@ -56,7 +56,11 @@ class SpotBot:
         self.client.pause_playback()
 
     def volume(self, vol):
-        if vol >= 0 or vol <= 100:
+        if vol > 0 or vol < 100:
             self.client.volume(vol)
         else:
             print('volume invalido')
+
+    def current(self):
+        song = self.client.currently_playing()
+        return {'musica': song['item']['name'], 'Artista': song['item']['artists'][0]['name']}
