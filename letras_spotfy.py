@@ -9,12 +9,14 @@ letra_tmp = ''
 def letra(mus):
     global letra_tmp
     musica, artista = mus.values()
+    musica = musica[:musica.lower().find('(feat.')]
+    artista = artista.replace('&', 'e')
     if musica in letra_tmp:
         return letra_tmp
     try:
-        print(f"Pesquisando {musica.strip()} - {artista.strip()}...")
+        print(f"Pesquisando {musica} - {artista.strip()}...")
         resp_letra = requests.get(
-            f'https://api.vagalume.com.br/search.php?art={artista}&mus={musica}&apikey={api_key}')
+            f'https://api.vagalume.com.br/search.php?art={artista.strip()}&mus={musica.strip()}&apikey={api_key}')
         resp_letra = resp_letra.json()
         letra_txt = resp_letra['mus'][0]['text']
     except Exception as inst:
