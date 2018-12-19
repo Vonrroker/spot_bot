@@ -1,15 +1,15 @@
-import os
 import requests
-from cred_auth import api_key_vagalume
+from credencials import api_key_vagalume
 
-api_key = api_key_vagalume
+api_key = api_key_vagalume  # Chave de api: https://auth.vagalume.com.br/
 letra_tmp = ''
 
 
 def letra(mus):
     global letra_tmp
     musica, artista = mus.values()
-    musica = musica[:musica.lower().find('(feat.')]
+    if 'feat' in musica.lower():
+        musica = musica[:musica.lower().find('(feat.')]
     artista = artista.replace('&', 'e')
     if musica in letra_tmp:
         return letra_tmp
@@ -27,10 +27,18 @@ def letra(mus):
 
 
 if __name__ == "__main__":
+    from Spotify_py import SpotBot
+    from credencials import spotify_credencials
+    import os
+    spotbot = SpotBot(spotify_credencials['user'],
+                      spotify_credencials['scope'],
+                      spotify_credencials['client_id'],
+                      spotify_credencials['client_secret'],
+                      spotify_credencials['redirect_uri'])
     while True:
         proxima = input('Aperte enter pra ver letra da musica atual ou escreva x pra sair: ')
         if proxima == '':
             os.system('cls')
-            print(letra())
+            print(letra(spotbot.current()))
         elif proxima == 'x':
             break

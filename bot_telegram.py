@@ -4,8 +4,9 @@ from Spotify_py import SpotBot
 from credencials import telegram, spotify_credencials, playlist_ids
 import letras_spotfy
 
-bot = telepot.Bot(telegram['token'])
+bot = telepot.Bot(telegram['token'])  # Obter token bot Telegram https://core.telegram.org/bots/api#authorizing-your-bot
 
+# obter credenciais spotfy: https://developer.spotify.com/dashboard/
 spotbot = SpotBot(spotify_credencials['user'],
                   spotify_credencials['scope'],
                   spotify_credencials['client_id'],
@@ -31,10 +32,10 @@ def handle(msg):
         print(f"from: {msg['chat']['id']}, Msg: {msg['text']}")
         global users
         if msg['chat']['id'] not in users:
-            # users.append(msg['chat']['id'])
+            users.append(msg['chat']['id'])
             global skip
             skip += 1
-            if skip == 1:
+            if skip == 5:
                 spotbot.skip()
                 resp_skip = f'{skip}/5 música pulada\n'
                 print(f"Resposta: {resp_skip}")
